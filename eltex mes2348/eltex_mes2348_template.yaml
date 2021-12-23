@@ -1,0 +1,452 @@
+zabbix_export:
+  version: '5.4'
+  date: '2021-12-23T12:45:56Z'
+  groups:
+    -
+      uuid: 62055bfd2b5b48a0bc2bcf51c23c1390
+      name: eltex
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 546cb1df90e34f3292c6f81032c72f2f
+      template: 'Template Eltex MES2348'
+      name: 'Template Eltex MES2348'
+      templates:
+        -
+          name: 'Template SNMP Interfaces 64bit'
+      groups:
+        -
+          name: eltex
+        -
+          name: Templates
+      items:
+        -
+          uuid: cbb8b705875744d588f13a24d5ffcd80
+          name: 'Memory Utilization Free'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.35265.41.1.2.1.1.6.0
+          key: eltexProcessMemoryFreePercent
+          delay: 5m
+          history: 60d
+          trends: 60d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: b4a910d8114b428b839ba5749c29b2f0
+          name: 'ICMP ping'
+          type: SIMPLE
+          key: icmpping
+          history: 1w
+          trends: 60d
+          status: DISABLED
+          valuemap:
+            name: 'Service state'
+          tags:
+            -
+              tag: Application
+              value: ICMP
+          triggers:
+            -
+              uuid: 5ba57572b464445c9026dd1c0edffcd7
+              expression: 'max(/Template Eltex MES2348/icmpping,#3)=0'
+              name: '{HOST.NAME} is unavailable by ICMP'
+              status: DISABLED
+              priority: HIGH
+        -
+          uuid: a345e792879e48b9a3a605da6adacb2c
+          name: 'ICMP loss'
+          type: SIMPLE
+          key: icmppingloss
+          delay: 2m
+          history: 1w
+          trends: 60d
+          status: DISABLED
+          value_type: FLOAT
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: ICMP
+          triggers:
+            -
+              uuid: 057dfc7ac68b48abb5f56381ec12fa82
+              expression: 'min(/Template Eltex MES2348/icmppingloss,5m)>20'
+              name: 'Ping loss is too high on {HOST.NAME}'
+              status: DISABLED
+              priority: WARNING
+              dependencies:
+                -
+                  name: '{HOST.NAME} is unavailable by ICMP'
+                  expression: 'max(/Template Eltex MES2348/icmpping,#3)=0'
+        -
+          uuid: 0ce9692e92eb452b8e547982c3bcad40
+          name: 'ICMP response time'
+          type: SIMPLE
+          key: icmppingsec
+          delay: 2m
+          history: 1w
+          trends: 60d
+          status: DISABLED
+          value_type: FLOAT
+          units: s
+          tags:
+            -
+              tag: Application
+              value: ICMP
+          triggers:
+            -
+              uuid: 7c3fbc4e5a914aa78a4450aa681e2be9
+              expression: 'avg(/Template Eltex MES2348/icmppingsec,5m)>0.15'
+              name: 'Response time is too high on {HOST.NAME}'
+              status: DISABLED
+              priority: WARNING
+              dependencies:
+                -
+                  name: '{HOST.NAME} is unavailable by ICMP'
+                  expression: 'max(/Template Eltex MES2348/icmpping,#3)=0'
+        -
+          uuid: 20e8bf17493443408ebdcc6649d6392b
+          name: 'CPU Utilization 5min'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.89.1.9.0
+          key: rlCpuUtilDuringLast5Minutes
+          delay: 5m
+          history: 60d
+          trends: 60d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: General
+          triggers:
+            -
+              uuid: 6120fa59d67f4050948068ccb26f5ce3
+              expression: 'last(/Template Eltex MES2348/rlCpuUtilDuringLast5Minutes)>70'
+              name: '{HOST.NAME} CPU Utilization 5min > 70%'
+              priority: AVERAGE
+            -
+              uuid: 70ccc80355df47d69e20f225c9e13840
+              expression: 'last(/Template Eltex MES2348/rlCpuUtilDuringLast5Minutes)>80'
+              name: '{HOST.NAME} CPU Utilization 5min > 80%'
+              priority: HIGH
+              type: MULTIPLE
+        -
+          uuid: a4a966edb79e42e492e25bbb59f73623
+          name: 'CPU Utilization 1min'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.89.1.8.0
+          key: rlCpuUtilDuringLastMinute
+          history: 60d
+          trends: 90d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 482ad1d08d804d98ab0b1fcf9421c3a0
+          name: 'CPU Utilization 1sec'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.89.1.7.0
+          key: rlCpuUtilDuringLastSecond
+          delay: 3m
+          history: 60d
+          trends: 90d
+          status: DISABLED
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 56efca2294a74a3d9f0360da62d9c8f9
+          name: 'Device MAC'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.89.53.4.1.7.1
+          key: rlPhdStackMacAddr
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          description: 'MAC adress Device'
+          inventory_link: MACADDRESS_A
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: b125c808746c422ea05b2c075b6fc178
+          name: 'Serial number'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.89.53.14.1.5.1
+          key: rlPhdUnitGenParamSerialNum
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          description: 'Serial number'
+          inventory_link: SERIALNO_A
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 26e0246ff0084751bf607b5f1defdf81
+          name: 'Device firmware'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.89.2.4.0
+          key: rndBrgVersion
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: TEXT
+          description: 'Version firmware'
+          inventory_link: OS
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 867dc66bc3d044bb9483912af7a62b83
+          name: 'Device contact details'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysContact.0'
+          key: sysContact
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: CHAR
+          description: 'The textual identification of the contact person for this managed node, together with information on how to contact this person.  If no contact information is known, the value is the zero-length string.'
+          inventory_link: CONTACT
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 5f6b9612a0554a8aab9d6ec2c37c6da8
+          name: 'Device description'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysDescr.0'
+          key: sysDescr
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: CHAR
+          description: 'A textual description of the entity.  This value should include the full name and version identification of the system''s hardware type, software operating-system, and networking software.'
+          inventory_link: HARDWARE
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 49bd46017b3f4391bad5146d6b56e44e
+          name: 'Device location'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysLocation.0'
+          key: sysLocation
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: CHAR
+          description: 'The physical location of this node (e.g., `telephone closet, 3rd floor'').  If the location is unknown, the value is the zero-length string.'
+          inventory_link: LOCATION
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: bd1b26a793e14d88aaae1f093ea91af5
+          name: 'Device name'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysName.0'
+          key: sysName
+          delay: 1h
+          history: 1w
+          trends: '0'
+          status: DISABLED
+          value_type: CHAR
+          description: 'An administratively-assigned name for this managed node. By convention, this is the node''s fully-qualified domain name.  If the name is unknown, the value is the zero-length string.'
+          inventory_link: NAME
+          tags:
+            -
+              tag: Application
+              value: General
+        -
+          uuid: 89e85bc67df94e8b97c6c2914e25d323
+          name: 'Device uptime'
+          type: SNMP_AGENT
+          snmp_oid: 'SNMPv2-MIB::sysUpTime.0'
+          key: sysUpTime
+          delay: 5m
+          history: 1w
+          trends: 60d
+          status: DISABLED
+          units: uptime
+          description: 'The time since the network management portion of the system was last re-initialized.'
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.01'
+          tags:
+            -
+              tag: Application
+              value: General
+      discovery_rules:
+        -
+          uuid: 24949067e3a14a68ae4b07e5fd58ffd0
+          name: Enviroment
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},1.3.6.1.4.1.35265.1.23.11.3.1.1]'
+          key: envfan
+          delay: 1d
+          item_prototypes:
+            -
+              uuid: 78dcf3ed91004db4b297a34225e895b2
+              name: fan_speed
+              type: SNMP_AGENT
+              snmp_oid: '.1.3.6.1.4.1.35265.1.23.11.3.1.1.{#SNMPINDEX}'
+              key: 'fan[{#SNMPINDEX}]'
+              history: 7d
+              units: rpm
+          graph_prototypes:
+            -
+              uuid: 0fc2c6e2ccc84cd3be9aa4e997efdecb
+              name: 'fan [{#SNMPINDEX}] speed'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 199C0D
+                  item:
+                    host: 'Template Eltex MES2348'
+                    key: 'fan[{#SNMPINDEX}]'
+        -
+          uuid: 8e5558a1ed604c8ba92cd5590c411a4b
+          name: Temperature
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SNMPVALUE},1.3.6.1.4.1.89.53.15.1.10]'
+          key: temp
+          delay: '14400'
+          item_prototypes:
+            -
+              uuid: 34b12f079e874eb9993063d67f37afb5
+              name: temperature
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.89.53.15.1.10.{#SNMPINDEX}'
+              key: 'temperature-[{#SNMPINDEX}]'
+              history: 30d
+              units: C
+          graph_prototypes:
+            -
+              uuid: b49e289bb50e44e8969782940118b57a
+              name: 'Temperature-[{#SNMPINDEX}]'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 199C0D
+                  item:
+                    host: 'Template Eltex MES2348'
+                    key: 'temperature-[{#SNMPINDEX}]'
+      macros:
+        -
+          macro: '{$SNMP_COMMUNITY}'
+          value: public
+      valuemaps:
+        -
+          uuid: dc050b1d54724d889a2edb4a09d84bca
+          name: 'Service state'
+          mappings:
+            -
+              value: '0'
+              newvalue: Down
+            -
+              value: '1'
+              newvalue: Up
+        -
+          uuid: 6d1d67dc9305467da1e9a30e5ae4774a
+          name: 'SNMP interface status (ifAdminStatus)'
+          mappings:
+            -
+              value: '1'
+              newvalue: up
+            -
+              value: '2'
+              newvalue: down
+            -
+              value: '3'
+              newvalue: testing
+        -
+          uuid: 7778d5de19ed47a5a18556b0d833fa95
+          name: 'SNMP interface status (ifOperStatus)'
+          mappings:
+            -
+              value: '1'
+              newvalue: up
+            -
+              value: '2'
+              newvalue: down
+            -
+              value: '3'
+              newvalue: testing
+            -
+              value: '4'
+              newvalue: unknown
+            -
+              value: '5'
+              newvalue: dormant
+            -
+              value: '6'
+              newvalue: notPresent
+            -
+              value: '7'
+              newvalue: lowerLayerDown
+        -
+          uuid: 1009771422b54f258776920922fcba16
+          name: Speed
+          mappings:
+            -
+              value: '10'
+              newvalue: '10  Mb/s'
+            -
+              value: '100'
+              newvalue: '100 Mb/s'
+            -
+              value: '1000'
+              newvalue: '1 Gb/s'
+            -
+              value: '10000'
+              newvalue: '10 Gb/s'
+  graphs:
+    -
+      uuid: bba08c76207e4538ac86257ef349616a
+      name: 'CPU Utilization'
+      graph_items:
+        -
+          sortorder: '1'
+          color: CC0000
+          item:
+            host: 'Template Eltex MES2348'
+            key: rlCpuUtilDuringLast5Minutes
+        -
+          sortorder: '2'
+          color: A54F10
+          item:
+            host: 'Template Eltex MES2348'
+            key: eltexProcessMemoryFreePercent
+        -
+          sortorder: '3'
+          color: F7941D
+          item:
+            host: 'Template Eltex MES2348'
+            key: rlCpuUtilDuringLastMinute
