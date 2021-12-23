@@ -1,0 +1,291 @@
+zabbix_export:
+  version: '5.4'
+  date: '2021-12-23T12:20:20Z'
+  groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: ab84faa25d4441d892c4c808531bd470
+      template: 'Template Eltex MES5448'
+      name: 'Template Eltex MES5448'
+      groups:
+        -
+          name: Templates
+      items:
+        -
+          uuid: 70b4718c99824f08b1267515d563da33
+          name: 'CPU temp'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.3073
+          key: cputemp
+          history: 30d
+          units: C
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 8cf37480136144e0898bf558d5192f95
+          name: fan-1
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2945
+          key: fan1rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 7c2680ee2f5e4a019e8149212a335fe0
+          name: fan-2
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2946
+          key: fan2rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: acca9e408c7140ecab6c1e7bbe68f043
+          name: fan-3
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2947
+          key: fan3rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 566effa36230466fa0a54ab5a832c971
+          name: fan-4
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2948
+          key: fan4rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 31cc562268b24c3f83b5fd13da52f99d
+          name: 'FPGA temp'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.3075
+          key: FPGAtemp
+          history: 30d
+          units: C
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 8b10d0c504cc491694220ed7f1391bcb
+          name: 'CPU total 5sec'
+          type: EXTERNAL
+          key: 'get_mes54_cpu_util.py["{HOST.IP}", 5]'
+          history: 7d
+          units: '%'
+          description: 'CPU Utilization 5 sec'
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: e012563414634e97a5a7a6e85c0b5d9d
+          name: 'CPU total 1min'
+          type: EXTERNAL
+          key: 'get_mes54_cpu_util.py["{HOST.IP}", 60]'
+          history: 7d
+          units: '%'
+          description: 'CPU Utilization 1 min'
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 630d5bc9c91c40f8a553baa0ed83ee1f
+          name: 'CPU total 5min'
+          type: EXTERNAL
+          key: 'get_mes54_cpu_util.py["{HOST.IP}", 300]'
+          history: 7d
+          units: '%'
+          description: 'CPU Utilization 5 min'
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 06f1c7addb3942e28539481285b7adc9
+          name: 'Leftmost temp'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.3076
+          key: Leftmosttemp
+          history: 30d
+          units: C
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: f991454508824e648e18bf60103099b4
+          name: 'PS-1 fan'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2949
+          key: ps-fan1rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 850a9b2450a04153b38304313a94adde
+          name: 'PS-2 fan'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.2950
+          key: ps-fan2rpm
+          history: 7d
+          units: rpm
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: fc0e1986a674476a9dd85b5d0f7902b1
+          name: 'Rightmost temp'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.3077
+          key: Rightmosttemp
+          history: 30d
+          units: C
+          tags:
+            -
+              tag: Application
+              value: environment
+        -
+          uuid: 0103396264584f919c6ea3f55e0a4125
+          name: 'Switch temp'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.2.1.99.1.1.1.4.3074
+          key: Switchtemp
+          history: 30d
+          units: C
+          tags:
+            -
+              tag: Application
+              value: environment
+          triggers:
+            -
+              uuid: 22e89f2597ef40399c7ede8fc80d9f98
+              expression: 'last(/Template Eltex MES5448/Switchtemp)>=50'
+              name: 'Switch Temperature >= 50C'
+              priority: HIGH
+  graphs:
+    -
+      uuid: 8b666c4eba3b4ea2a8ae60f7db61e53a
+      name: 'CPU Utilization'
+      graph_items:
+        -
+          sortorder: '1'
+          color: 199C0D
+          item:
+            host: 'Template Eltex MES5448'
+            key: 'get_mes54_cpu_util.py["{HOST.IP}", 60]'
+        -
+          sortorder: '2'
+          color: F63100
+          item:
+            host: 'Template Eltex MES5448'
+            key: 'get_mes54_cpu_util.py["{HOST.IP}", 300]'
+        -
+          sortorder: '3'
+          color: F7941D
+          item:
+            host: 'Template Eltex MES5448'
+            key: 'get_mes54_cpu_util.py["{HOST.IP}", 5]'
+    -
+      uuid: 7bc4ff1f61424df0bcadf04863b9f87d
+      name: fan-modules
+      graph_items:
+        -
+          sortorder: '1'
+          color: 199C0D
+          item:
+            host: 'Template Eltex MES5448'
+            key: fan1rpm
+        -
+          sortorder: '2'
+          color: F63100
+          item:
+            host: 'Template Eltex MES5448'
+            key: fan2rpm
+        -
+          sortorder: '3'
+          color: 2774A4
+          item:
+            host: 'Template Eltex MES5448'
+            key: fan3rpm
+        -
+          sortorder: '4'
+          color: F7941D
+          item:
+            host: 'Template Eltex MES5448'
+            key: fan4rpm
+    -
+      uuid: b2c7967aad25447891d1bb61a79a2ecd
+      name: 'power supply fans'
+      graph_items:
+        -
+          sortorder: '1'
+          color: 199C0D
+          item:
+            host: 'Template Eltex MES5448'
+            key: ps-fan1rpm
+        -
+          sortorder: '2'
+          color: F63100
+          item:
+            host: 'Template Eltex MES5448'
+            key: ps-fan2rpm
+    -
+      uuid: f9ecbc0b2c964080a06bfdce23e16014
+      name: temperature
+      graph_items:
+        -
+          sortorder: '1'
+          color: 199C0D
+          item:
+            host: 'Template Eltex MES5448'
+            key: cputemp
+        -
+          sortorder: '2'
+          color: F63100
+          item:
+            host: 'Template Eltex MES5448'
+            key: FPGAtemp
+        -
+          sortorder: '3'
+          color: 2774A4
+          item:
+            host: 'Template Eltex MES5448'
+            key: Leftmosttemp
+        -
+          sortorder: '4'
+          color: F7941D
+          item:
+            host: 'Template Eltex MES5448'
+            key: Rightmosttemp
+        -
+          sortorder: '5'
+          color: FC6EA3
+          item:
+            host: 'Template Eltex MES5448'
+            key: Switchtemp
