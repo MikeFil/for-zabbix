@@ -43,7 +43,6 @@ def main():
 
         with open('./vpns_states.yml', 'w') as file:
             yaml.dump(vpns_states, file)
-        print('waiting')
 
         sleep(300)
 
