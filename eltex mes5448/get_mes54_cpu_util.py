@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-import sys
 from sys import argv
 from pysnmp.entity.rfc3413.oneliner import cmdgen
 
@@ -62,11 +61,8 @@ if __name__ == "__main__":
     device = Device(ip, community)
 
     if time == '5':
-        cpu_util = int(device.get_5sec_cpu_util())
-        sys.exit(cpu_util)
+        Print(int(device.get_5sec_cpu_util()))
     elif time == '60':
-        cpu_util = int(device.get_60sec_cpu_util())
-        sys.exit(cpu_util)
+        Print(int(device.get_60sec_cpu_util()))
     elif time == '300':
-        cpu_util = int(device.get_300sec_cpu_util())
-        sys.exit(cpu_util)
+        Print(int(device.get_300sec_cpu_util()))
